@@ -593,36 +593,41 @@
     priceSelect.addEventListener('change', updateMap);
 
     // Function to update the map based on the selected cuisine and price range
-    function updateMap() {
-      // Remove all existing circles from the map
-      myMap.eachLayer(function (layer) {
-        if (layer instanceof L.Circle) {
-          myMap.removeLayer(layer);
-        }
-      });
-
-      // Get the selected cuisine and price range
-      var selectedCuisine = cuisineSelect.value;
-      var selectedPrice = priceSelect.value;
-
-      // Loop through the cities data
-      for (let i = 1; i <= Object.keys(citiesData).length; i++) {
-        let city = citiesData[i];
-        let cuisine = city.cuisine;
-        let price = city[selectedPrice];
-
-        // Check if the city matches the selected cuisine
-        if (cuisine === selectedCuisine) {
-          // Create a circle for the city
-          let circle = L.circle([city.latitude, city.longitude], {
-            color: 'green',
-            fillColor: 'green',
-            fillOpacity: 0.5,
-            radius: price * 150
-          }).addTo(myMap);
-        }
-      }
+function updateMap() {
+  // Remove all existing circles from the map
+  myMap.eachLayer(function (layer) {
+    if (layer instanceof L.Circle) {
+      myMap.removeLayer(layer);
     }
+  });
+
+  // Get the selected cuisine and price range
+  var selectedCuisine = cuisineSelect.value;
+  var selectedPrice = priceSelect.value.slice(-1); // Extract the last character
+
+  // Loop through the cities data
+  for (let i = 1; i <= Object.keys(citiesData).length; i++) {
+    let city = citiesData[i];
+    let cuisine = city.cuisine;
+    let price = city[selectedPrice];
+    let perCapita = city["per_capita" + selectedPrice];
+    let restaurantCount = city.total_rest;
+
+    // Check if the city matches the selected cuisine
+    if (cuisine === selectedCuisine) {
+      // Calculate radius based on restaurant count
+      let radius = Math.sqrt(restaurantCount) * 2000;
+
+      // Create a circle for the city
+      let circle = L.circle([city.latitude, city.longitude], {
+        color: 'green',
+        fillColor: 'green',
+        fillOpacity: perCapita / 100,
+        radius: radius
+      }).addTo(myMap);
+    }
+  }
+}
 
     // Initial map update
     updateMap();
