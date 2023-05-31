@@ -78,12 +78,12 @@ function updateMap() {
     let cuisine = city.cuisine;
     let price = city[selectedPrice];
     let perCapita = city["per_capita" + selectedPrice];
-    let restaurantCount = city.total_rest;
+    let restaurantCount = city["price" + selectedPrice];
 
     // Check if the city matches the selected cuisine
     if (cuisine === selectedCuisine) {
       // Calculate radius based on restaurant count
-      let radius = Math.sqrt(restaurantCount) * 2000;
+      let radius = Math.sqrt(restaurantCount) * 4000;
       let fillColor = getColorBasedOnPerCapita(perCapita, colorRange);
 
       // Create a circle for the city
