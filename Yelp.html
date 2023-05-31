@@ -582,8 +582,8 @@ Most recent code:
   'per_capita4': 0.8,
   'per_cap_tot': 161.61}};
 
-// Create a map object
-let myMap = L.map("map", {
+    // Create a map object
+    let myMap = L.map("map", {
       center: [37.09, -95.71],
       zoom: 5
     });
@@ -609,34 +609,29 @@ let myMap = L.map("map", {
       cuisineSelect.appendChild(option);
     });
 
-    // Function to update the bar graph
-    function updateBarGraph(restaurantCounts) {
+     // Function to update the bar graph
+     function updateBarGraph(restaurantCounts) {
       // Extract the city names and restaurant counts from the restaurantCounts object
       let cities = Object.keys(restaurantCounts);
-      let counts = Object.values(restaurantCounts);
 
       // Create the bar graph data
-      let data = [
-        {
-          x: counts,
-          y: cities,
-          type: 'bar',
-          orientation: 'h'
-        }
-      ];
+      let data = Object.keys(restaurantCounts[0]).map(priceRange => ({
+        x: cities,
+        y: restaurantCounts.map(counts => counts[priceRange]),
+        name: priceRange,
+        type: 'bar'
+      }));
 
       // Create the bar graph layout
       let layout = {
         title: 'Number of Restaurants by City',
         xaxis: {
-          title: 'Count'
-        },
-        yaxis: {
           title: 'City'
         },
-        margin: {
-          l: 150
-        }
+        yaxis: {
+          title: 'Count'
+        },
+        barmode: 'stack'
       };
 
       // Plot the bar graph
@@ -644,64 +639,66 @@ let myMap = L.map("map", {
     }
 
     function updateMap() {
-  // Remove all existing circles from the map
-  myMap.eachLayer(function (layer) {
-    if (layer instanceof L.Circle) {
-      myMap.removeLayer(layer);
-    }
-  });
+      // Remove all existing circles from the map
+      myMap.eachLayer(function (layer) {
+        if (layer instanceof L.Circle) {
+          myMap.removeLayer(layer);
+        }
+      });
 
-  // Get the selected cuisine and price range
-  var selectedCuisine = cuisineSelect.value;
-  var selectedPrice = priceSelect.value.slice(-1); // Extract the last character
+      // Get the selected cuisine and price range
+      var selectedCuisine = cuisineSelect.value;
+      var selectedPrice = priceSelect.value.slice(-1); // Extract the last character
 
-  // Loop through the cities data
-  let restaurantCounts = {};
-  for (let i = 1; i <= Object.keys(citiesData).length; i++) {
-    let city = citiesData[i];
-    let cuisine = city.cuisine;
-    let price = city[selectedPrice];
-    let perCapita;
-    let fillColor = 'green';
-    let opacity = 0.5;
+      // Loop through the cities data
+      let restaurantCounts = [];
+      for (let i = 1; i <= Object.keys(citiesData).length; i++) {
+        let city = citiesData[i];
+        let cuisine = city.cuisine;
+        let perCapita;
+        let fillColor = 'green';
+        let opacity = 0.5;
 
-    if (selectedCuisine === 'total_rest') {
-      perCapita = city.per_cap_tot;
-    } else {
-      perCapita = city['per_capita' + selectedPrice];
-    }
+        if (selectedCuisine === 'total_rest') {
+          perCapita = city.per_cap_tot;
+        } else {
+          perCapita = city['per_capita' + selectedPrice];
+        }
 
-    // Calculate opacity based on per capita value
-    opacity = (perCapita / 100) * 0.5;
+        // Calculate opacity based on per capita value
+        opacity = (perCapita / 100) * 0.5;
 
-    // Calculate fill color based on per capita value
-    if (perCapita >= 70) {
-      fillColor = 'red';
-    } else if (perCapita >= 40) {
-      fillColor = 'yellow';
-    }
+        // Calculate fill color based on per capita value
+        if (perCapita >= 70) {
+          fillColor = 'red';
+        } else if (perCapita >= 40) {
+          fillColor = 'yellow';
+        }
 
-    if (cuisine === selectedCuisine || selectedCuisine === 'total_rest') {
-      // Calculate the total number of restaurants for each city
-      if (restaurantCounts[city.location]) {
-        restaurantCounts[city.location] += city.total_rest;
-      } else {
-        restaurantCounts[city.location] = city.total_rest;
+        if (cuisine === selectedCuisine || selectedCuisine === 'total_rest') {
+          // Calculate the total number of restaurants for each city
+          let totalRestaurants = city.price1 + city.price2 + city.price3 + city.price4;
+          let counts = {
+            price1: city.price1,
+            price2: city.price2,
+            price3: city.price3,
+            price4: city.price4
+          };
+          restaurantCounts.push(counts);
+
+          // Create a circle marker for each city
+          let circle = L.circle([city.latitude, city.longitude], {
+            color: 'red',
+            fillColor: fillColor,
+            fillOpacity: opacity,
+            radius: totalRestaurants * 100
+          }).addTo(myMap);
+        }
       }
 
-      // Create a circle marker for each city
-      let circle = L.circle([city.latitude, city.longitude], {
-        color: 'red',
-        fillColor: fillColor,
-        fillOpacity: opacity,
-        radius: city.total_rest * 100
-      }).addTo(myMap);
+      // Update the bar graph
+      updateBarGraph(restaurantCounts);
     }
-  }
-
-  // Update the bar graph
-  updateBarGraph(restaurantCounts);
-}
 
     // Add event listeners to the dropdown menus
     cuisineSelect.addEventListener('change', updateMap);
@@ -712,7 +709,3 @@ let myMap = L.map("map", {
   </script>
 </body>
 </html>
-
-
-
-
