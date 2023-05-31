@@ -1,3 +1,5 @@
+Most recent code: 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +9,8 @@
   <!-- Include Leaflet CSS and JavaScript -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <!-- Include Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
   <!-- Create a container for the map -->
@@ -18,6 +22,7 @@
     <option value="Indian">Indian</option>
     <option value="Italian">Italian</option>
     <option value="Mexican">Mexican</option>
+    <option value="total_rest">Total Restaurants</option>
   </select>
 
   <!-- Dropdown menu for price range -->
@@ -27,6 +32,10 @@
     <option value="price3">Price Level 3</option>
     <option value="price4">Price Level 4</option>
   </select>
+
+  <!-- Container for the bar graph -->
+  <div id="bar-graph" style="margin-top: 20px;"></div>
+
 
 
 
@@ -573,27 +582,68 @@
   'per_capita4': 0.8,
   'per_cap_tot': 161.61}};
 
-     // Create a map object.
-     let myMap = L.map("map", {
+// Create a map object
+let myMap = L.map("map", {
       center: [37.09, -95.71],
       zoom: 5
     });
 
-    // Add a tile layer.
+    // Add a tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(myMap);
 
-    // Get a reference to the cuisine and price range dropdown menus
+    // Get references to the dropdown menus
     let cuisineSelect = document.getElementById('cuisine-select');
     let priceSelect = document.getElementById('price-select');
 
-    // Add event listeners to the dropdown menus
-    cuisineSelect.addEventListener('change', updateMap);
-    priceSelect.addEventListener('change', updateMap);
+    // Populate the cuisine dropdown menu with unique cuisines from the cities data
+    let uniqueCuisines = Array.from(
+      new Set(Object.values(citiesData).map(city => city.cuisine))
+    );
+    uniqueCuisines.unshift('total_rest'); // Add 'total_rest' as an option
+    uniqueCuisines.forEach(cuisine => {
+      let option = document.createElement('option');
+      option.value = cuisine;
+      option.textContent = cuisine;
+      cuisineSelect.appendChild(option);
+    });
 
-    // Function to update the map based on the selected cuisine and price range
-function updateMap() {
+    // Function to update the bar graph
+    function updateBarGraph(restaurantCounts) {
+      // Extract the city names and restaurant counts from the restaurantCounts object
+      let cities = Object.keys(restaurantCounts);
+      let counts = Object.values(restaurantCounts);
+
+      // Create the bar graph data
+      let data = [
+        {
+          x: counts,
+          y: cities,
+          type: 'bar',
+          orientation: 'h'
+        }
+      ];
+
+      // Create the bar graph layout
+      let layout = {
+        title: 'Number of Restaurants by City',
+        xaxis: {
+          title: 'Count'
+        },
+        yaxis: {
+          title: 'City'
+        },
+        margin: {
+          l: 150
+        }
+      };
+
+      // Plot the bar graph
+      Plotly.newPlot('bar-graph', data, layout);
+    }
+
+    function updateMap() {
   // Remove all existing circles from the map
   myMap.eachLayer(function (layer) {
     if (layer instanceof L.Circle) {
@@ -606,31 +656,63 @@ function updateMap() {
   var selectedPrice = priceSelect.value.slice(-1); // Extract the last character
 
   // Loop through the cities data
+  let restaurantCounts = {};
   for (let i = 1; i <= Object.keys(citiesData).length; i++) {
     let city = citiesData[i];
     let cuisine = city.cuisine;
     let price = city[selectedPrice];
-    let perCapita = city["per_capita" + selectedPrice];
-    let restaurantCount = city.total_rest;
+    let perCapita;
+    let fillColor = 'green';
+    let opacity = 0.5;
 
-    // Check if the city matches the selected cuisine
-    if (cuisine === selectedCuisine) {
-      // Calculate radius based on restaurant count
-      let radius = Math.sqrt(restaurantCount) * 2000;
+    if (selectedCuisine === 'total_rest') {
+      perCapita = city.per_cap_tot;
+    } else {
+      perCapita = city['per_capita' + selectedPrice];
+    }
 
-      // Create a circle for the city
+    // Calculate opacity based on per capita value
+    opacity = (perCapita / 100) * 0.5;
+
+    // Calculate fill color based on per capita value
+    if (perCapita >= 70) {
+      fillColor = 'red';
+    } else if (perCapita >= 40) {
+      fillColor = 'yellow';
+    }
+
+    if (cuisine === selectedCuisine || selectedCuisine === 'total_rest') {
+      // Calculate the total number of restaurants for each city
+      if (restaurantCounts[city.location]) {
+        restaurantCounts[city.location] += city.total_rest;
+      } else {
+        restaurantCounts[city.location] = city.total_rest;
+      }
+
+      // Create a circle marker for each city
       let circle = L.circle([city.latitude, city.longitude], {
-        color: 'green',
-        fillColor: 'green',
-        fillOpacity: perCapita / 100,
-        radius: radius
+        color: 'red',
+        fillColor: fillColor,
+        fillOpacity: opacity,
+        radius: city.total_rest * 100
       }).addTo(myMap);
     }
   }
+
+  // Update the bar graph
+  updateBarGraph(restaurantCounts);
 }
 
-    // Initial map update
+    // Add event listeners to the dropdown menus
+    cuisineSelect.addEventListener('change', updateMap);
+    priceSelect.addEventListener('change', updateMap);
+
+    // Initially update the map and bar graph
     updateMap();
   </script>
 </body>
 </html>
+
+
+
+
