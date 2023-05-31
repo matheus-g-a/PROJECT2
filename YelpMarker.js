@@ -17,6 +17,46 @@
     cuisineSelect.addEventListener('change', updateMap);
     priceSelect.addEventListener('change', updateMap);
 
+    // Create a legend to display information about our map.
+    let info = L.control({
+      position: "bottomright"
+    });
+
+      // Define color range based on per_capita
+   var colorRange = [
+    { perCapita: 0, color: 'green' },
+    { perCapita: 20, color: 'yellow' },
+    { perCapita: 40, color: 'orange' },
+    { perCapita: 60, color: 'red' }
+  ];
+
+  
+
+    // When the layer control is added, insert a div with the class of "legend".
+    info.onAdd = function() {
+      let div = L.DomUtil.create("div", "legend");
+      let legendHTML = '';
+    
+      colorRange.forEach(function(item, index) {
+        legendHTML += '<div class="legend-item">';
+        legendHTML += '<div class="legend-color ' + item.color + '"></div>';
+        
+        if (index === colorRange.length - 1) {
+          legendHTML += '<span class="legend-label">≥ ' + item.perCapita + '</span>';
+        } else {
+          legendHTML += '<span class="legend-label">' + item.perCapita + ' - ' + colorRange[index + 1].perCapita + '</span>';
+        }
+    
+        legendHTML += '</div>';
+      });
+    
+      div.innerHTML = legendHTML;
+      return div;
+    };
+    
+    // Add the info legend to the map.
+    info.addTo(myMap);
+
     // Function to update the map based on the selected cuisine and price range
 function updateMap() {
   // Remove all existing circles from the map
@@ -30,15 +70,7 @@ function updateMap() {
   var selectedCuisine = cuisineSelect.value;
   var selectedPrice = priceSelect.value.slice(-1); // Extract the last character
 
-   // Define color range based on per_capita
-   var colorRange = [
-    { perCapita: 0, color: 'green' },
-    { perCapita: 20, color: 'yellow' },
-    { perCapita: 40, color: 'orange' },
-    { perCapita: 60, color: 'red' }
-  ];
-
-  
+ 
 
   // Loop through the cities data
   for (let i = 1; i <= Object.keys(citiesData).length; i++) {
@@ -61,6 +93,12 @@ function updateMap() {
         fillOpacity: perCapita / 100,
         radius: radius
       }).addTo(myMap);
+      // Create a popup with information for the city
+      let popupContent = "<strong>" + city.location + "</strong><br>";
+      popupContent += "Cuisine: " + cuisine + "<br>";
+      popupContent += "Per Capita: " + perCapita + "<br>";
+      popupContent += "Restaurant Count: " + restaurantCount;
+      circle.bindPopup(popupContent);
     }
   }
 }

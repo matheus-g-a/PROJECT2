@@ -10,3 +10,54 @@ body {
   html {
     height: 100%;
   }
+  .legend-color.green {
+    background-color: green;
+  }
+  
+  .legend-color.yellow {
+    background-color: yellow;
+  }
+  
+  .legend-color.orange {
+    background-color: orange;
+  }
+  
+  .legend-color.red {
+    background-color: red;
+  }
+  
+  .legend {
+    position: absolute !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    background-color: white !important; 
+    padding: 10px !important;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .legend-color {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+
+  #select-div{
+    position: relative;
+    bottom: 100px !important;
+    left: 20px !important;
+    background-color: white !important;
+    padding: 10px !important;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 9999 !important;
+    width: 15%;
+    text-align: center;
+  }
+  #select-div select {
+    display: inline-block;
+  }
