@@ -1,0 +1,145 @@
+location,cuisine,price,count
+New York City,Indian,1,304
+New York City,Indian,2,793
+New York City,Indian,3,31
+New York City,Indian,4,4
+New York City,Mexican,1,1700
+New York City,Mexican,2,3400
+New York City,Mexican,3,319
+New York City,Mexican,4,33
+New York City,Italian,1,2500
+New York City,Italian,2,5200
+New York City,Italian,3,1000
+New York City,Italian,4,121
+New York City,Chinese,1,1900
+New York City,Chinese,2,2300
+New York City,Chinese,3,225
+New York City,Chinese,4,42
+Los Angeles,Indian,1,62
+Los Angeles,Indian,2,421
+Los Angeles,Indian,3,14
+Los Angeles,Indian,4,1
+Los Angeles,Mexican,1,3600
+Los Angeles,Mexican,2,3900
+Los Angeles,Mexican,3,237
+Los Angeles,Mexican,4,56
+Los Angeles,Italian,1,811
+Los Angeles,Italian,2,2200
+Los Angeles,Italian,3,279
+Los Angeles,Italian,4,63
+Los Angeles,Chinese,1,783
+Los Angeles,Chinese,2,1600
+Los Angeles,Chinese,3,110
+Los Angeles,Chinese,4,35
+San Francisco,Indian,1,35
+San Francisco,Indian,2,184
+San Francisco,Indian,3,8
+San Francisco,Indian,4,2
+San Francisco,Mexican,1,420
+San Francisco,Mexican,2,1100
+San Francisco,Mexican,3,96
+San Francisco,Mexican,4,17
+San Francisco,Italian,1,182
+San Francisco,Italian,2,875
+San Francisco,Italian,3,154
+San Francisco,Italian,4,22
+San Francisco,Chinese,1,212
+San Francisco,Chinese,2,681
+San Francisco,Chinese,3,62
+San Francisco,Chinese,4,10
+Miami,Indian,1,11
+Miami,Indian,2,55
+Miami,Indian,3,3
+Miami,Indian,4,0
+Miami,Mexican,1,286
+Miami,Mexican,2,641
+Miami,Mexican,3,72
+Miami,Mexican,4,10
+Miami,Italian,1,284
+Miami,Italian,2,863
+Miami,Italian,3,146
+Miami,Italian,4,19
+Miami,Chinese,1,140
+Miami,Chinese,2,310
+Miami,Chinese,3,40
+Miami,Chinese,4,11
+Seattle,Indian,1,34
+Seattle,Indian,2,150
+Seattle,Indian,3,3
+Seattle,Indian,4,0
+Seattle,Mexican,1,417
+Seattle,Mexican,2,756
+Seattle,Mexican,3,39
+Seattle,Mexican,4,6
+Seattle,Italian,1,188
+Seattle,Italian,2,750
+Seattle,Italian,3,77
+Seattle,Italian,4,16
+Seattle,Chinese,1,144
+Seattle,Chinese,2,482
+Seattle,Chinese,3,35
+Seattle,Chinese,4,8
+Atlanta,Indian,1,50
+Atlanta,Indian,2,131
+Atlanta,Indian,3,2
+Atlanta,Indian,4,0
+Atlanta,Mexican,1,514
+Atlanta,Mexican,2,793
+Atlanta,Mexican,3,39
+Atlanta,Mexican,4,5
+Atlanta,Italian,1,376
+Atlanta,Italian,2,706
+Atlanta,Italian,3,77
+Atlanta,Italian,4,13
+Atlanta,Chinese,1,324
+Atlanta,Chinese,2,397
+Atlanta,Chinese,3,23
+Atlanta,Chinese,4,3
+Denver,Indian,1,11
+Denver,Indian,2,98
+Denver,Indian,3,0
+Denver,Indian,4,0
+Denver,Mexican,1,616
+Denver,Mexican,2,834
+Denver,Mexican,3,35
+Denver,Mexican,4,1
+Denver,Italian,1,325
+Denver,Italian,2,669
+Denver,Italian,3,58
+Denver,Italian,4,7
+Denver,Chinese,1,147
+Denver,Chinese,2,254
+Denver,Chinese,3,14
+Denver,Chinese,4,0
+Chicago,Indian,1,81
+Chicago,Indian,2,202
+Chicago,Indian,3,6
+Chicago,Indian,4,2
+Chicago,Mexican,1,1500
+Chicago,Mexican,2,1900
+Chicago,Mexican,3,114
+Chicago,Mexican,4,18
+Chicago,Italian,1,1100
+Chicago,Italian,2,2400
+Chicago,Italian,3,216
+Chicago,Italian,4,26
+Chicago,Chinese,1,530
+Chicago,Chinese,2,600
+Chicago,Chinese,3,48
+Chicago,Chinese,4,7
+Dallas,Indian,1,79
+Dallas,Indian,2,141
+Dallas,Indian,3,0
+Dallas,Indian,4,0
+Dallas,Mexican,1,1100
+Dallas,Mexican,2,1200
+Dallas,Mexican,3,50
+Dallas,Mexican,4,8
+Dallas,Italian,1,473
+Dallas,Italian,2,827
+Dallas,Italian,3,81
+Dallas,Italian,4,8
+Dallas,Chinese,1,305
+Dallas,Chinese,2,377
+Dallas,Chinese,3,20
+Dallas,Chinese,4,4
